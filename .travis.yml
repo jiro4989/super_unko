@@ -18,6 +18,7 @@ matrix:
       env: SH_VERSION=4.4
     - os: linux
       env: SH_VERSION=5.0
+    - os: osx
 
 addons:
   apt:
@@ -26,20 +27,21 @@ addons:
       - toilet
 
 before_install:
-  - sudo add-apt-repository ppa:duggan/bats --yes
-  - sudo apt-get update -qq
+  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo add-apt-repository ppa:duggan/bats --yes; fi
+  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo apt-get update -qq; fi
   ## Install bash
   - export TMPDIR=$TRAVIS_BUILD_DIR/tmp
   - mkdir -p $TMPDIR
-  - if [[ "$SH_VERSION" != "default" ]];then ( cd "$TMPDIR" && curl "http://ftp.gnu.org/gnu/bash/bash-${SH_VERSION}.tar.gz" | tar xvz && cd bash* && ./configure; make && sudo make install && sudo mv /bin/bash /bin/bash.old && sudo cp ./bash /bin/bash ) ;fi
+  - if [[ "$SH_VERSION" != "default" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]];then ( cd "$TMPDIR" && curl "http://ftp.gnu.org/gnu/bash/bash-${SH_VERSION}.tar.gz" | tar xvz && cd bash* && ./configure; make && sudo make install && sudo mv /bin/bash /bin/bash.old && sudo cp ./bash /bin/bash ) ;fi
   - bash --version
 
 install:
-  - sudo apt-get install -qq bats
+  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo apt-get install -qq bats; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install bats; fi
   - bats --version
-  - ./linter.sh setup
+  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then ./linter.sh setup; fi
 
 script:
   - sudo ./install.sh
-  - ./linter.sh all
+  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then ./linter.sh all; fi
   - ./test.sh
