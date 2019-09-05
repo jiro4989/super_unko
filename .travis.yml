@@ -30,6 +30,7 @@ addons:
       - toilet
       - bats
   homebrew:
+    update: true
     packages:
       - figlet
       - toilet
