@@ -22,13 +22,20 @@ matrix:
 
 addons:
   apt:
+    update: true
+    sources:
+      - sourceline: 'ppa:duggan/bats'
     packages:
       - figlet
       - toilet
+      - bats
+  homebrew:
+    packages:
+      - figlet
+      - toilet
+      - bats
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo add-apt-repository ppa:duggan/bats --yes; fi
-  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo apt-get update -qq; fi
   ## Install bash
   - export TMPDIR=$TRAVIS_BUILD_DIR/tmp
   - mkdir -p $TMPDIR
@@ -36,9 +43,6 @@ before_install:
   - bash --version
 
 install:
-  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo apt-get install -qq bats; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install bats; fi
-  - bats --version
   - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then ./linter.sh setup; fi
 
 script:
