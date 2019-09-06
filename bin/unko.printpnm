@@ -74,7 +74,10 @@ max_value() {
 repeat() {
   local n=$1
   local c=${2:-1}
-  seq "$n" | xargs -I@ echo -n "$c"
+  seq "$n" |
+    while read -r i; do
+      echo -n "$c"
+    done
 }
 
 ## stage はうんこの段を返す。
