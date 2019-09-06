@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+set -x
+
 readonly TARGET_COMMAND="$(pwd)/../bin/unko.printpnm"
 
 setup() {
