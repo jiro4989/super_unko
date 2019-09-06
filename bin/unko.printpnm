@@ -125,7 +125,7 @@ align_center() {
   local lines=()
   while read -r line; do
     local w
-    w="$(echo "$line" | grep -o . | wc -l)"
+    w=${#line}
 
     if [ "$max_width" -lt "$w" ]; then
       max_width=$w
@@ -136,10 +136,12 @@ align_center() {
   # うんこを1行ずつ出力
   for line in "${lines[@]}"; do
     local w
-    w="$(echo "$line" | grep -o . | wc -l)"
+    w=${#line}
+    echo "max width = $max_width, line = $line, line width = ${#line}"
 
     local left_width=$(((max_width - w) / 2))
     local right_width=$((max_width - left_width - w))
+    echo "left width = $left_width, right width = $right_width"
     echo "$(repeat "$left_width" "$pad")$line$(repeat "$right_width" "$pad")"
   done
 }
