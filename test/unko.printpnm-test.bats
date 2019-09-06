@@ -51,17 +51,17 @@ setup() {
 
 @test "unko.printpnmのalign_center関数は与えられた文字列が奇数個の時、中央揃えして返す" {
   run align_center 0 <<< "$(echo -e '1\n111')"
+  echo "${lines[@]}"
   [ "$status" -eq 0 ]
   [ "${lines[0]}" = "010" ]
-  echo "${lines[1]}"
   [ "${lines[1]}" = "111" ]
 }
 
 @test "unko.printpnmのalign_center関数は与えられた文字列が偶数個の時、右側を多く詰めて中央揃えして返す" {
   run align_center 0 <<< "$(echo -e '1\n1111')"
+  echo "${lines[@]}"
   [ "$status" -eq 0 ]
   [ "${lines[0]}" = "0100" ]
-  echo "${lines[1]}"
   [ "${lines[1]}" = "1111" ]
 }
 
